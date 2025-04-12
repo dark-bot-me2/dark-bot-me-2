@@ -23,7 +23,7 @@ body: `
 
 ‣ 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 ⓕ
 ‣ Ťåñjïł Hāšāń Æßp 
-\n\n\n  `,
+\n\n\n  `,
 attachment: await global.utils.getStreamFromURL("https://i.imgur.com/WxtBNOq.jpeg")
 });
 }
