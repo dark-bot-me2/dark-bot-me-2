@@ -1,46 +1,45 @@
-const axios = require('axios');
-
+const axios = require("axios");
 module.exports = {
-	config: {
-		name: "download",
-		version: "1.0",
-		author: "loufi",
-		countDown: 0,
-		role: 0,
-		shortDescription: "Downdload Instagram video",
-		longDescription: "download Instagram video's,story,reels, photo etc.",
-		category: "media",
-		guide: "{pn} link"
-	},
+  config: {
+    name: "dl",
+    aliases: ["download"],
+    version: "1.0",
+    author: "♡︎ 𝐻𝐴𝑆𝐴𝑁 ♡︎",
+    countDown: 2,
+    role: 0,
+    description: {
+      en: "Download 1000+ website's videos",
+    },
+    category: "media",
+    guide: {
+      en: "{pn} [url | reply to an url]",
+    },
+  },
 
-	onStart: async function ({ message, args }) {
-		const name = args.join(" ");
-		if (!name)
-			return message.reply(`Please enter a link 🙂🙌`);
-		else {
-			const BASE_URL = `https://www.nguyenmanh.name.vn/api/igDL?url=${encodeURIComponent(name)}=&apikey=SyryTUZn`;
+  onStart: async function ({ api, args, event }) {
+    const url = event.messageReply?.body || args[0];
+       if (!url) {
+               api.setMessageReaction("❌", event.messageID, () => {}, true);
+              return api.sendMessage("⁉️ | Please provide a valid URL Or reply to an URL", event.threadID, event.messageID);
+    }
+    try {
+    const { data } = await axios.get("https://raw.githubusercontent.com/KingsOfToxiciter/alldl/refs/heads/main/toxicitieslordhasan.json");
+    const hasan = data.hasan;
+      
+    const downloadLink = `${hasan}/alldl?url=${encodeURIComponent(url)}`;
 
-			 await message.reply("Downloading video please wait....");
+        api.sendMessage(
+          {
+            body: "✨ | Here is your Download video..!!",
+            attachment: await global.utils.getStreamFromURL(downloadLink)
+          },
+          event.threadID,
+          event.messageID
+        );
 
-
-			try {
-				let res = await axios.get(BASE_URL)
-
-
-				 let title = res.data.result.title
-
-				let img =  res.data.result.video[0].url;
-
-				const form = {
-					body: `${title}`
-				};
-			if (img)
-					form.attachment = await global.utils.getStreamFromURL(img);
-				message.reply(form);  
-			} catch (e) { message.reply(`Sorry Link is not supported🥺`)
-									console.log(e);
-									}
-
-		}
-	}
+    } catch (error) {
+      api.setMessageReaction("❎", event.messageID, () => {}, true);
+      api.sendMessage(`❌ | Error:\n${error.message}`, event.threadID, event.messageID);
+    }
+  },
 };
